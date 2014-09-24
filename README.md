@@ -51,7 +51,7 @@ Compare to files and show items that are only part of one
 
 
 ```
-./showMismatch file.1txt file2.txt
+./showMismatch file1.txt file2.txt
 
 elements not part of first file: 
 bar
