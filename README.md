@@ -7,8 +7,6 @@ Some small scripts that make my life easier
 fvim
 =======
 
-**f**ind an open in **vim**
-
 search for a filename and open it in vim. If more then one match 
 is found, they are shown as a numbered list
 
