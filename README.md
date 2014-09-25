@@ -34,6 +34,28 @@ tries to find information about available updates.
 
 **Supported OS:** Ubuntue 12.04, Ubuntu 14.04
 
+```
+
+  ######################################################
+  #                 one.domain.name                    #
+  #                                                    #
+  #                                                    #
+  #    >>> New release '14.04.1 LTS' available. <<<    #
+  #                                                    #
+  ######################################################
+  
+  ######################################################
+  #                 two.domain.name                    #
+  #                                                    #
+  #    5 packages can be updated.                      #
+  #    2 updates are security updates.                 #
+  #                                                    #
+  ######################################################
+  
+
+```
+
+
 
 showMismatch
 =========
