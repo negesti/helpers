@@ -63,9 +63,13 @@ set scrolloff=2
 set expandtab
 set autoindent
 set hlsearch
+set number
+
+colorscheme distinguished
+
 if has('gui_running')
   " select color scheme
-  colorscheme fruity
+  colorscheme distinguished
   " Resize the window
   set lines=62 columns=150
 endif
@@ -107,9 +111,7 @@ call vundle#rc()
 
 Bundle 'gmarik/vundle'
 
-Bundle 'commentary.vim'
 Bundle 'vim-scripts/L9'
-Bundle 'vim-scripts/FuzzyFinder'
-Bundle 'vim-scripts/csv.vim'
 Bundle 'airblade/vim-gitgutter'
+Bundle 'jeffkreeftmeijer/vim-numbertoggle'
 filetype plugin indent on
