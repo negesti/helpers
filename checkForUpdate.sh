@@ -62,4 +62,5 @@ do
 
   let "INDEX += 1"
 done
+printf "\n"
 
