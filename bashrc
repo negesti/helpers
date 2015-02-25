@@ -146,8 +146,8 @@ alias lt='ls -ltrh'     # sort by date
 
 
 # everybody needs music :)
-alias fm4='mplayer http://mp3stream1.apasf.apa.at:8000/ -cache 256 '
-alias fm4-ms='mplayer mms://apasf.apa.at/fm4_live_worldwide -cache 256 -cache-min 32'
+alias fm4='mplayer http://mp3stream1.apasf.apa.at:8000 '
+alias fm4-ms='mplayer mms://apasf.apa.at/fm4_live_worldwide -cache 512 '
 
 alias bc='bc -l'
 

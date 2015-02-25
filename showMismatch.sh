@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ $# -ne 2 ]; then
-  echo "we need to files to find a mismatch"
+  echo "we need two files to find a mismatch"
   exit -1
 fi
 
