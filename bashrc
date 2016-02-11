@@ -143,7 +143,7 @@ alias ldir='ls | nl'
 alias lx='ls -lXB'      # sort by extension
 alias lr='ls -lR'       # recursive ls
 alias lt='ls -ltrh'     # sort by date
-
+alias xpwd='pwd | xclip -selection clipboard'
 
 # everybody needs music :)
 alias fm4='mplayer http://mp3stream1.apasf.apa.at:8000 '
@@ -166,3 +166,8 @@ shopt -s cdspell
 export HISTIGNORE="&:exit"
 
 
+
+export NVM_DIR="/home/nesta/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+export EDITOR=vim
