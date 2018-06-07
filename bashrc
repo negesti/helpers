@@ -13,6 +13,8 @@ fi
 # don't put duplicate lines in the history. See bash(1) for more options
 # ... or force ignoredups and ignorespace
 HISTCONTROL=ignoredups:ignorespace:ignoreboth
+# dont store in history
+export HISTIGNORE="&:exit"
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -26,7 +28,7 @@ HISTFILESIZE=2000
 shopt -s checkwinsize
 
 # make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+[ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
 
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
@@ -37,33 +39,6 @@ fi
 case "$TERM" in
     xterm-color) color_prompt=yes;;
 esac
-
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
-#force_color_prompt=yes
-
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
-    else
-	color_prompt=
-    fi
-fi
-
-if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-unset color_prompt force_color_prompt
-
-if [ -e /usr/share/git-core/contrib/completion/git-prompt.sh ]; then
-  source /usr/share/git-core/contrib/completion/git-prompt.sh
-fi
 
 function prompt_command {
     local RETURN_CODE="$?"
@@ -104,7 +79,7 @@ function prompt_command {
       PROMPT_PREFIX="$PROMPT_PREFIX$GIT_COLOR$(__git_ps1 "(%s)")$ASCII_RESET"
     fi
 
-    PS1="$ASCII_BOLD[$USER_COLOR\u $WORK_COLOR\W $PROMPT_PREFIX$ASCII_RESET$ASCII_BOLD ]$ASCII_RESET$PROMPT_COLOR\\\$$ASCII_RESET "
+    PS1="$ASCII_BOLD[$USER_COLOR\u $HOST_COLOR${HOSTNAME} $WORK_COLOR\W $PROMPT_PREFIX$ASCII_RESET$ASCII_BOLD]$ASCII_RESET$PROMPT_COLOR\\\$$ASCII_RESET "
 
 }
 
@@ -122,6 +97,15 @@ xterm*|rxvt*)
 *)
     ;;
 esac
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
@@ -145,9 +129,15 @@ alias lr='ls -lR'       # recursive ls
 alias lt='ls -ltrh'     # sort by date
 alias xpwd='pwd | xclip -selection clipboard'
 
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    . /etc/bash_completion
+fi
+
 # everybody needs music :)
 alias fm4='mplayer http://mp3stream1.apasf.apa.at:8000 '
-alias fm4-ms='mplayer mms://apasf.apa.at/fm4_live_worldwide -cache 512 '
 
 alias bc='bc -l'
 
@@ -156,18 +146,33 @@ alias bc='bc -l'
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
 
 # auto correct cd commands
 shopt -s cdspell
-# dont store duplicates and exit in history
-export HISTIGNORE="&:exit"
-
-
-
-export NVM_DIR="/home/nesta/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
 export EDITOR=vim
+
+screenssh() {
+  local SESSIONNAME="$1"
+  if [ "$SESSIONNAME" != "" ]; then
+    export SCREENSSH="/root/.screenssh.$SESSIONNAME"
+
+    SSHVARS="SSH_CLIENT SSH_TTY SSH_AUTH_SOCK SSH_CONNECTION DISPLAY"
+    rm -f "$SCREENSSH"
+    for x in ${SSHVARS} ; do
+        v=$(eval echo \$$x)
+        echo "export $x=\"$v\"" >> "$SCREENSSH"
+    done
+    screen -dR -S "$SESSIONNAME"
+  fi
+}
+
+if [ "$LC_SCREENSESSION" != "" ]; then
+  SCREENSESSION="$LC_SCREENSESSION"
+  unset LC_SCREENSESSION
+  screenssh "$SCREENSESSION"
+fi
+
+if [ "$TERM" == "screen" -a "$SCREENSSH" != "" ]; then
+  source "$SCREENSSH"
+fi

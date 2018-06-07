@@ -21,6 +21,7 @@ fi
 if [[ $i -eq 1 ]] 
 then
   echo "Only one file found. Opening it"
+  echo "${a[0]}"
   exec $EDITOR "${a[0]}"
   exit 0
 fi

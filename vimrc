@@ -105,14 +105,11 @@ set laststatus=2
 "hi User1 term=bold cterm=bold ctermbg=green
 
 " vundle
-set rtp+=~/.vim/bundle/vundle
-call vundle#rc()
+"set rtp+=~/.vim/bundle/Vundle.vim
+"#call vundle#rc()
+"Bundle 'gmarik/vundle'
+"
+"Bundle 'vim-scripts/L9'
+"Bundle 'airblade/vim-gitgutter'
+"Bundle 'SuperTab'
 
-Bundle 'gmarik/vundle'
-
-Bundle 'vim-scripts/L9'
-Bundle 'airblade/vim-gitgutter'
-Bundle 'jeffkreeftmeijer/vim-numbertoggle'
-Bundle 'SuperTab'
-
-filetype plugin indent on
