@@ -7,23 +7,13 @@ if [ -f /etc/bashrc ]; then
   . /etc/bashrc
 fi
 
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if [ -f /etc/profile ]; then
-  . /etc/profile
-fi
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    . /etc/bash_completion
-fi
-
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
 # don't put duplicate lines in the history. See bash(1) for more options
 # ... or force ignoredups and ignorespace
 HISTCONTROL=ignoredups:ignorespace:ignoreboth
-# dont 'exit' store in history
+# dont store in history
 export HISTIGNORE="&:exit"
 
 # append to the history file, don't overwrite it
@@ -33,15 +23,12 @@ shopt -s histappend
 HISTSIZE=1000
 HISTFILESIZE=2000
 
-# dont store duplicates and exit in history
-export HISTIGNORE="&:exit"
-
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
 # make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+[ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
 
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
@@ -52,10 +39,6 @@ fi
 case "$TERM" in
     xterm-color) color_prompt=yes;;
 esac
-
-if [ -e /usr/share/git-core/contrib/completion/git-prompt.sh ]; then
-  source /usr/share/git-core/contrib/completion/git-prompt.sh
-fi
 
 function prompt_command {
     local RETURN_CODE="$?"
@@ -96,14 +79,7 @@ function prompt_command {
       PROMPT_PREFIX="$PROMPT_PREFIX$GIT_COLOR$(__git_ps1 "(%s)")$ASCII_RESET"
     fi
 
-    HOST_PART=''
-    if [ ! -f ~/.bash_hide_hostname ]; then
-      HOST_PART=" $HOST_COLOR${HOSTNAME}"
-    fi
-
-
-#    PS1="$ASCII_BOLD[$USER_COLOR\u $HOST_COLOR${HOSTNAME} $WORK_COLOR\W $PROMPT_PREFIX$ASCII_RESET$ASCII_BOLD]$ASCII_RESET$PROMPT_COLOR\\\$$ASCII_RESET "
-    PS1="$ASCII_BOLD[$USER_COLOR\u$HOST_PART $WORK_COLOR\W $PROMPT_PREFIX$ASCII_RESET$ASCII_BOLD]$ASCII_RESET$PROMPT_COLOR\\\$$ASCII_RESET "
+    PS1="$ASCII_BOLD[$USER_COLOR\u $HOST_COLOR${HOSTNAME} $WORK_COLOR\W $PROMPT_PREFIX$ASCII_RESET$ASCII_BOLD]$ASCII_RESET$PROMPT_COLOR\\\$$ASCII_RESET "
 
 }
 
@@ -122,8 +98,6 @@ xterm*|rxvt*)
     ;;
 esac
 
-
-
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
@@ -132,6 +106,45 @@ esac
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+# some more ls aliases
+alias ll='ls -lF'
+alias la='ls -A'
+alias lh='ls -lh'
+alias ldir='ls | nl'
+alias lx='ls -lXB'      # sort by extension
+alias lr='ls -lR'       # recursive ls
+alias lt='ls -ltrh'     # sort by date
+alias xpwd='pwd | xclip -selection clipboard'
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    . /etc/bash_completion
+fi
+
+# everybody needs music :)
+alias fm4='mplayer http://mp3stream1.apasf.apa.at:8000 '
+
+alias bc='bc -l'
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
 
 # auto correct cd commands
@@ -163,33 +176,3 @@ fi
 if [ "$TERM" == "screen" -a "$SCREENSSH" != "" ]; then
   source "$SCREENSSH"
 fi
-
-# auto correct cd commands
-shopt -s cdspell
-
-if [ -d ~/.nvm ]; then
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-fi
-
-export EDITOR=vim
-
-# User specific environment and startup programs
-PATH=$PATH:$HOME/.local/bin:$HOME/bin
-export PATH
-
-# add the ssh key to the keyring
-#tmp=`ssh-add -l`
-#if [ $? -eq 1 ] ; then
-#  ssh-add ~/.ssh/id2_dsa
-#fi
-
-unset XMODIFIERS
-
-export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
-
-## barracuda vpn must use xterm
-export TERM=xterm
-
-

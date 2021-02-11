@@ -66,6 +66,8 @@ set hlsearch
 set number
 set virtualedit=block
 
+colorscheme distinguished
+
 if has('gui_running')
   " select color scheme
   colorscheme distinguished
@@ -77,6 +79,16 @@ endif
 if filereadable("/etc/vimrc")
   source /etc/vimrc
 endif
+
+" Current git branch - looks nice but mouse wheel wont work...
+"set statusline=%1*%{GitBranch()}%*     " name of the gitbranch
+function! GitBranch()
+  let branch = system("git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* //'")
+  if branch != ''
+    return '[' . substitute(branch, '\n', '', 'g') . ']' 
+  en
+  return ''
+endfunction
 
 " - %F: absolute file path
 " - %m: show [+] if the file has changes
@@ -91,4 +103,13 @@ set statusline+=\ %c                " column in line
 set laststatus=2 
 
 "hi User1 term=bold cterm=bold ctermbg=green
+
+" vundle
+"set rtp+=~/.vim/bundle/Vundle.vim
+"#call vundle#rc()
+"Bundle 'gmarik/vundle'
+"
+"Bundle 'vim-scripts/L9'
+"Bundle 'airblade/vim-gitgutter'
+"Bundle 'SuperTab'
 

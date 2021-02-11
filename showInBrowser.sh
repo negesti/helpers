@@ -1,6 +1,6 @@
 #!/bin/bash
 
-firefox  http://localhost:7777
+firefox  http://127.0.0.1:8082
 
 echo "        
 ####################################################################
@@ -12,4 +12,4 @@ echo "
 ####################################################################
 "
 
-python -m SimpleHTTPServer 7777
+python -m SimpleHTTPServer 8082
